@@ -106,37 +106,15 @@
     .big-heart {
       width: clamp(80px, 20vw, 140px);
       height: clamp(80px, 20vw, 140px);
-      position: relative;
-      animation: fadeIn 1s ease 0.8s both;
       margin-bottom: 2.5rem;
       cursor: default;
+      filter: drop-shadow(0 0 40px rgba(255, 71, 87, 0.5));
+      animation: fadeIn 1s ease 0.8s both, heartbeat 1.3s ease-in-out infinite;
     }
 
-    .big-heart::before,
-    .big-heart::after {
-      content: '';
-      position: absolute;
+    .big-heart svg {
       width: 100%;
       height: 100%;
-      border-radius: 50% 50% 0 0;
-      background: linear-gradient(135deg, #ff6b81, #ff4757);
-      box-shadow: 0 0 40px rgba(255, 71, 87, 0.5);
-    }
-
-    .big-heart::before {
-      left: -25%;
-      transform: rotate(-45deg);
-      transform-origin: bottom right;
-    }
-
-    .big-heart::after {
-      left: 25%;
-      transform: rotate(45deg);
-      transform-origin: bottom left;
-    }
-
-    .big-heart {
-      animation: fadeIn 1s ease 0.8s both, heartbeat 1.3s ease-in-out infinite;
     }
 
     @keyframes heartbeat {
@@ -497,9 +475,19 @@
 
   <!-- ====== SCREEN 1: LANDING ====== -->
   <div class="screen active" id="landing">
-    <h1 class="title">Nico <span>&hearts;</span> Natalia</h1>
+    <h1 class="title">Natalia <span>&hearts;</span> Nico</h1>
 
-    <div class="big-heart"></div>
+    <div class="big-heart">
+      <svg viewBox="0 0 24 24" fill="url(#heartGrad)">
+        <defs>
+          <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff6b81"/>
+            <stop offset="100%" stop-color="#ff4757"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
 
     <div class="envelope-container" id="envelope" onclick="openEnvelope()">
       <div class="envelope">
@@ -545,7 +533,7 @@
     <div class="finale-heart">&hearts;</div>
     <h1 class="finale-text">Feliz San Valent&iacute;n</h1>
     <p class="finale-sub">con todo mi amor</p>
-    <p class="finale-names">Nico &hearts; Natalia</p>
+    <p class="finale-names">Natalia &hearts; Nico</p>
     <div class="hearts-rain" id="heartsRain"></div>
   </div>
 
