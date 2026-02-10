@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para ti, Natalia</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1a0a0a;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ======================== */
+    /*   FLOATING HEARTS BG    */
+    /* ======================== */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: rgba(255, 80, 100, 0.15);
+      font-size: 1.4rem;
+      animation: floatUp linear infinite;
+      bottom: -2rem;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(720deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* ======================== */
+    /*        SCREENS           */
+    /* ======================== */
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ======================== */
+    /*    SCREEN 1: LANDING     */
+    /* ======================== */
+    #landing {
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0a0a 100%);
+    }
+
+    .title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 7vw, 4rem);
+      color: #ff6b81;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 30px rgba(255, 107, 129, 0.4);
+      animation: fadeInDown 1s ease 0.3s both;
+    }
+
+    .title span {
+      color: #ff4757;
+      display: inline-block;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    /* Big Heart */
+    .big-heart {
+      width: clamp(80px, 20vw, 140px);
+      height: clamp(80px, 20vw, 140px);
+      position: relative;
+      animation: fadeIn 1s ease 0.8s both;
+      margin-bottom: 2.5rem;
+      cursor: default;
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50% 50% 0 0;
+      background: linear-gradient(135deg, #ff6b81, #ff4757);
+      box-shadow: 0 0 40px rgba(255, 71, 87, 0.5);
+    }
+
+    .big-heart::before {
+      left: -25%;
+      transform: rotate(-45deg);
+      transform-origin: bottom right;
+    }
+
+    .big-heart::after {
+      left: 25%;
+      transform: rotate(45deg);
+      transform-origin: bottom left;
+    }
+
+    .big-heart {
+      animation: fadeIn 1s ease 0.8s both, heartbeat 1.3s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.15); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.1); }
+    }
+
+    /* Envelope */
+    .envelope-container {
+      position: relative;
+      cursor: pointer;
+      animation: fadeInUp 1s ease 1.4s both;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-container:hover {
+      transform: scale(1.05);
+    }
+
+    .envelope-container:active {
+      transform: scale(0.97);
+    }
+
+    .envelope {
+      width: clamp(180px, 50vw, 280px);
+      height: clamp(110px, 30vw, 170px);
+      background: linear-gradient(145deg, #f5e6d0, #e8d5b8);
+      border-radius: 0 0 8px 8px;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      overflow: visible;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 0, 50% 55%, 100% 0);
+      background: linear-gradient(180deg, #e0c9a8, #d4b896);
+      transform-origin: top center;
+      transition: transform 0.8s ease;
+      z-index: 3;
+    }
+
+    .envelope-back-flap {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 0, 50% 55%, 100% 0);
+      background: linear-gradient(180deg, #c9ad88, #bfa07a);
+      z-index: 0;
+    }
+
+    .envelope-inner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 100%, 50% 40%, 100% 100%);
+      background: linear-gradient(0deg, #dcc8a8, #d4b896);
+      z-index: 2;
+    }
+
+    .envelope-heart {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      z-index: 4;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      transition: opacity 0.3s ease;
+    }
+
+    /* Letter inside envelope */
+    .letter {
+      position: absolute;
+      width: 75%;
+      height: 50%;
+      background: white;
+      left: 12.5%;
+      top: 20%;
+      border-radius: 2px;
+      z-index: 1;
+      transition: transform 0.8s ease 0.4s;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .letter-lines {
+      position: absolute;
+      top: 20%;
+      left: 15%;
+      right: 15%;
+      bottom: 20%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .letter-line {
+      height: 2px;
+      background: #e0d5c5;
+      border-radius: 1px;
+    }
+
+    .letter-line:last-child {
+      width: 60%;
+    }
+
+    .hint-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+      color: rgba(255, 107, 129, 0.7);
+      margin-top: 1.5rem;
+      animation: fadeInUp 1s ease 2s both, softPulse 2s ease-in-out infinite 3s;
+      letter-spacing: 1px;
+    }
+
+    @keyframes softPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    /* Envelope opening */
+    .envelope-container.opening .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-container.opening .envelope-heart {
+      opacity: 0;
+    }
+
+    .envelope-container.opening .letter {
+      transform: translateY(-120%);
+    }
+
+    /* ======================== */
+    /*  SCREEN 2: TRANSITION   */
+    /* ======================== */
+    #transition-screen {
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0a0a 100%);
+    }
+
+    .transition-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.5rem, 5vw, 2.8rem);
+      color: #ff6b81;
+      text-align: center;
+      line-height: 1.6;
+      text-shadow: 0 0 20px rgba(255, 107, 129, 0.3);
+      animation: fadeIn 1.5s ease both;
+      padding: 0 2rem;
+    }
+
+    /* ======================== */
+    /*    SCREEN 3: PHOTOS      */
+    /* ======================== */
+    #photo-screen {
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0a0a 100%);
+    }
+
+    .photo-wrapper {
+      position: relative;
+      width: clamp(260px, 80vw, 450px);
+      max-height: 65vh;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 50px rgba(255, 71, 87, 0.2), 0 0 0 3px rgba(255, 107, 129, 0.3);
+      animation: zoomIn 0.6s ease both;
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      max-height: 65vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-counter {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-family: 'Poppins', sans-serif;
+      backdrop-filter: blur(10px);
+    }
+
+    .photo-tap-hint {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      margin-top: 1.2rem;
+      letter-spacing: 1px;
+      animation: softPulse 2s ease-in-out infinite;
+    }
+
+    .photo-decoration {
+      position: absolute;
+      font-size: 1.2rem;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .photo-decoration.top-left {
+      top: -15px;
+      left: -15px;
+    }
+
+    .photo-decoration.bottom-right {
+      bottom: -15px;
+      right: -15px;
+    }
+
+    /* ======================== */
+    /*     SCREEN 4: FINALE     */
+    /* ======================== */
+    #finale {
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0a0a 100%);
+    }
+
+    .finale-heart {
+      font-size: clamp(3rem, 12vw, 6rem);
+      margin-bottom: 1.5rem;
+      animation: heartbeat 1.3s ease-in-out infinite;
+    }
+
+    .finale-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.2rem, 8vw, 4.5rem);
+      color: #ff6b81;
+      text-align: center;
+      text-shadow: 0 0 40px rgba(255, 107, 129, 0.5);
+      animation: fadeInUp 1s ease 0.3s both;
+      line-height: 1.3;
+    }
+
+    .finale-sub {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
+      color: rgba(255, 107, 129, 0.6);
+      margin-top: 1.5rem;
+      animation: fadeInUp 1s ease 1s both;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .finale-names {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.2rem, 4vw, 1.8rem);
+      color: #ff4757;
+      margin-top: 0.5rem;
+      animation: fadeInUp 1s ease 1.4s both;
+    }
+
+    /* Hearts rain for finale */
+    .hearts-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .rain-heart {
+      position: absolute;
+      top: -5%;
+      font-size: 1.5rem;
+      animation: rainFall linear forwards;
+      opacity: 0.7;
+    }
+
+    @keyframes rainFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ======================== */
+    /*      ANIMATIONS          */
+    /* ======================== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* ======================== */
+    /*  PROGRESS DOTS           */
+    /* ======================== */
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 107, 129, 0.25);
+      transition: all 0.4s ease;
+    }
+
+    .progress-dot.active {
+      background: #ff6b81;
+      box-shadow: 0 0 10px rgba(255, 107, 129, 0.5);
+      transform: scale(1.2);
+    }
+
+    .progress-dot.done {
+      background: rgba(255, 107, 129, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating hearts background -->
+  <div class="hearts-bg" id="heartsBg"></div>
+
+  <!-- ====== SCREEN 1: LANDING ====== -->
+  <div class="screen active" id="landing">
+    <h1 class="title">Nico <span>&hearts;</span> Natalia</h1>
+
+    <div class="big-heart"></div>
+
+    <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+      <div class="envelope">
+        <div class="envelope-back-flap"></div>
+        <div class="letter">
+          <div class="letter-lines">
+            <div class="letter-line"></div>
+            <div class="letter-line"></div>
+            <div class="letter-line"></div>
+            <div class="letter-line"></div>
+          </div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-inner"></div>
+        <div class="envelope-heart">&hearts;</div>
+      </div>
+    </div>
+
+    <p class="hint-text">Toca el sobre &hearts;</p>
+  </div>
+
+  <!-- ====== SCREEN 2: TRANSITION ====== -->
+  <div class="screen" id="transition-screen">
+    <p class="transition-text">
+      Cada momento contigo<br>es un regalo...
+    </p>
+  </div>
+
+  <!-- ====== SCREEN 3: PHOTOS ====== -->
+  <div class="screen" id="photo-screen">
+    <div class="photo-wrapper" id="photoWrapper" onclick="nextPhoto()">
+      <span class="photo-decoration top-left">&hearts;</span>
+      <img id="photoImg" src="" alt="Nosotros">
+      <div class="photo-counter" id="photoCounter">1 / 8</div>
+      <span class="photo-decoration bottom-right">&hearts;</span>
+    </div>
+    <div class="progress-dots" id="progressDots"></div>
+    <p class="photo-tap-hint">toca para continuar</p>
+  </div>
+
+  <!-- ====== SCREEN 4: FINALE ====== -->
+  <div class="screen" id="finale">
+    <div class="finale-heart">&hearts;</div>
+    <h1 class="finale-text">Feliz San Valent&iacute;n</h1>
+    <p class="finale-sub">con todo mi amor</p>
+    <p class="finale-names">Nico &hearts; Natalia</p>
+    <div class="hearts-rain" id="heartsRain"></div>
+  </div>
+
+  <script>
+    // =============================
+    //  CONFIG - Pon aqui tus fotos
+    // =============================
+    const PHOTOS = [
+      'fotos/foto1.jpg',
+      'fotos/foto2.jpg',
+      'fotos/foto3.jpg',
+      'fotos/foto4.jpg',
+      'fotos/foto5.jpg',
+      'fotos/foto6.jpg',
+      'fotos/foto7.jpg',
+      'fotos/foto8.jpg',
+    ];
+
+    // =============================
+    //  STATE
+    // =============================
+    let currentPhoto = 0;
+    let isTransitioning = false;
+
+    // =============================
+    //  FLOATING HEARTS BACKGROUND
+    // =============================
+    function createFloatingHearts() {
+      const container = document.getElementById('heartsBg');
+      const hearts = ['\u2665', '\u2764', '\u2661', '\u2763'];
+
+      for (let i = 0; i < 25; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+        heart.style.animationDelay = (Math.random() * 10) + 's';
+        heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+        container.appendChild(heart);
+      }
+    }
+
+    // =============================
+    //  SCREEN MANAGEMENT
+    // =============================
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // =============================
+    //  ENVELOPE OPEN
+    // =============================
+    function openEnvelope() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+
+      const envelope = document.getElementById('envelope');
+      envelope.classList.add('opening');
+
+      // After envelope animation, show transition text
+      setTimeout(() => {
+        showScreen('transition-screen');
+
+        // After reading the text, show first photo
+        setTimeout(() => {
+          setupPhotos();
+          showScreen('photo-screen');
+          isTransitioning = false;
+        }, 2500);
+      }, 1500);
+    }
+
+    // =============================
+    //  PHOTO GALLERY
+    // =============================
+    function setupPhotos() {
+      currentPhoto = 0;
+      const dotsContainer = document.getElementById('progressDots');
+      dotsContainer.innerHTML = '';
+
+      PHOTOS.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+        dotsContainer.appendChild(dot);
+      });
+
+      updatePhoto();
+    }
+
+    function updatePhoto() {
+      const img = document.getElementById('photoImg');
+      const counter = document.getElementById('photoCounter');
+      const wrapper = document.getElementById('photoWrapper');
+
+      // Animate out
+      wrapper.style.animation = 'none';
+      wrapper.offsetHeight; // trigger reflow
+      wrapper.style.animation = 'zoomIn 0.5s ease both';
+
+      img.src = PHOTOS[currentPhoto];
+      counter.textContent = (currentPhoto + 1) + ' / ' + PHOTOS.length;
+
+      // Update dots
+      document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+        dot.classList.remove('active', 'done');
+        if (i === currentPhoto) dot.classList.add('active');
+        else if (i < currentPhoto) dot.classList.add('done');
+      });
+    }
+
+    function nextPhoto() {
+      if (isTransitioning) return;
+
+      currentPhoto++;
+
+      if (currentPhoto >= PHOTOS.length) {
+        // Show finale
+        isTransitioning = true;
+        showScreen('finale');
+        startHeartsRain();
+        isTransitioning = false;
+        return;
+      }
+
+      updatePhoto();
+    }
+
+    // =============================
+    //  FINALE HEARTS RAIN
+    // =============================
+    function startHeartsRain() {
+      const container = document.getElementById('heartsRain');
+      const hearts = ['\u2665', '\u2764', '\u2661'];
+
+      function spawnHeart() {
+        const heart = document.createElement('span');
+        heart.className = 'rain-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (0.8 + Math.random() * 2) + 'rem';
+        heart.style.color = `hsl(${345 + Math.random() * 20}, ${70 + Math.random() * 30}%, ${50 + Math.random() * 20}%)`;
+        heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+        container.appendChild(heart);
+
+        heart.addEventListener('animationend', () => heart.remove());
+      }
+
+      // Initial burst
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => spawnHeart(), i * 100);
+      }
+
+      // Continuous rain
+      setInterval(spawnHeart, 300);
+    }
+
+    // =============================
+    //  INIT
+    // =============================
+    createFloatingHearts();
+  </script>
+
+</body>
+</html>
