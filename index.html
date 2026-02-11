@@ -908,11 +908,27 @@
     // =============================
     //  MUSIC CONTROLS
     // =============================
+    const MUSIC_START = 90;
+    let seekApplied = false;
+
+    // Safari iOS ignores currentTime until audio is truly ready
+    // Use timeupdate as failsafe to force seek
+    bgMusic.addEventListener('timeupdate', function forceSeek() {
+      if (!seekApplied && bgMusic.currentTime < MUSIC_START - 1) {
+        bgMusic.currentTime = MUSIC_START;
+      }
+      if (bgMusic.currentTime >= MUSIC_START - 1) {
+        seekApplied = true;
+        bgMusic.removeEventListener('timeupdate', forceSeek);
+      }
+    });
+
     function startMusic() {
       if (musicStarted) return;
+      seekApplied = false;
       bgMusic.volume = 0;
       bgMusic.play().then(() => {
-        bgMusic.currentTime = 90;
+        bgMusic.currentTime = MUSIC_START;
         musicStarted = true;
         musicToggle.classList.add('visible');
         musicToggle.classList.remove('muted');
@@ -927,16 +943,16 @@
           bgMusic.volume = vol;
         }, 100);
       }).catch(() => {
-        // Autoplay blocked - show toggle so user can tap
         musicToggle.classList.add('visible');
       });
     }
 
     function toggleMusic() {
       if (!musicStarted) {
+        seekApplied = false;
         bgMusic.volume = 0.6;
         bgMusic.play().then(() => {
-          bgMusic.currentTime = 90;
+          bgMusic.currentTime = MUSIC_START;
           musicStarted = true;
           musicToggle.classList.remove('muted');
         });
@@ -950,6 +966,16 @@
         musicToggle.classList.add('muted');
       }
     }
+
+    // Pause music when app is minimized / tab hidden
+    document.addEventListener('visibilitychange', () => {
+      if (!musicStarted) return;
+      if (document.hidden) {
+        bgMusic.pause();
+      } else if (!musicToggle.classList.contains('muted')) {
+        bgMusic.play();
+      }
+    });
 
     function openEnvelope() {
       if (isTransitioning) return;
