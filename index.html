@@ -443,6 +443,35 @@
     }
 
     /* ======================== */
+    /*      REWIND BUTTON       */
+    /* ======================== */
+    .rewind-btn {
+      margin-top: 1.5rem;
+      padding: 10px 28px;
+      border: 2px solid rgba(255, 107, 129, 0.4);
+      background: rgba(255, 107, 129, 0.08);
+      color: #ff6b81;
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      border-radius: 30px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      animation: fadeInUp 1s ease 2.5s both;
+      backdrop-filter: blur(10px);
+    }
+
+    .rewind-btn:hover {
+      background: rgba(255, 107, 129, 0.18);
+      border-color: rgba(255, 107, 129, 0.7);
+      transform: scale(1.05);
+    }
+
+    .rewind-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ======================== */
     /*     DUDU & BUBU GIFS     */
     /* ======================== */
     .gif-sticker {
@@ -797,6 +826,7 @@
       <div class="days-label">d&iacute;as juntos</div>
     </div>
     <img src="fotos/gif1.gif" alt="Dudu y Bubu abrazo" class="gif-sticker finale-gif">
+    <button class="rewind-btn" onclick="startRewind()">&#8592; Volver a ver todo</button>
     <div class="hearts-rain" id="heartsRain"></div>
   </div>
 
@@ -841,6 +871,7 @@
     let musicStarted = false;
     let letterDone = false;
     let letterTyping = false;
+    let isRewinding = false;
     const bgMusic = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
 
@@ -982,6 +1013,13 @@
         return;
       }
       if (letterDone) {
+        if (isRewinding) {
+          isRewinding = false;
+          showScreen('landing');
+          // Reset envelope for replay
+          document.getElementById('envelope').classList.remove('opening');
+          return;
+        }
         setupPhotos();
         showScreen('photo-screen');
       }
@@ -1028,10 +1066,21 @@
     function nextPhoto() {
       if (isTransitioning) return;
 
+      if (isRewinding) {
+        currentPhoto--;
+        if (currentPhoto < 0) {
+          // Back to letter screen
+          isRewinding = false;
+          showLetterDone();
+          return;
+        }
+        updatePhoto();
+        return;
+      }
+
       currentPhoto++;
 
       if (currentPhoto >= PHOTOS.length) {
-        // Show finale
         isTransitioning = true;
         showScreen('finale');
         startHeartsRain();
@@ -1040,6 +1089,28 @@
       }
 
       updatePhoto();
+    }
+
+    // =============================
+    //  REWIND
+    // =============================
+    function startRewind() {
+      isRewinding = true;
+      currentPhoto = PHOTOS.length - 1;
+      showScreen('photo-screen');
+      updatePhoto();
+    }
+
+    function showLetterDone() {
+      showScreen('letter-screen');
+      const content = document.getElementById('letterContent');
+      const cursor = document.getElementById('letterCursor');
+      const hint = document.getElementById('letterHint');
+      content.innerHTML = LETTER_TEXT.replace(/\n/g, '<br>');
+      cursor.style.display = 'none';
+      letterDone = true;
+      letterTyping = false;
+      hint.classList.add('visible');
     }
 
     // =============================
