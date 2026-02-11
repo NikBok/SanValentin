@@ -875,8 +875,6 @@
     const bgMusic = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
 
-    bgMusic.currentTime = 90;
-
     // =============================
     //  FLOATING HEARTS BACKGROUND
     // =============================
@@ -912,9 +910,9 @@
     // =============================
     function startMusic() {
       if (musicStarted) return;
-      bgMusic.currentTime = 90;
       bgMusic.volume = 0;
       bgMusic.play().then(() => {
+        bgMusic.currentTime = 90;
         musicStarted = true;
         musicToggle.classList.add('visible');
         musicToggle.classList.remove('muted');
@@ -936,9 +934,9 @@
 
     function toggleMusic() {
       if (!musicStarted) {
-        bgMusic.currentTime = 90;
         bgMusic.volume = 0.6;
         bgMusic.play().then(() => {
+          bgMusic.currentTime = 90;
           musicStarted = true;
           musicToggle.classList.remove('muted');
         });
