@@ -28,10 +28,11 @@
     /* ======================== */
     .hearts-bg {
       position: fixed;
-      inset: 0;
+      inset: -20px;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
+      transition: transform 0.3s ease-out;
     }
 
     .floating-heart {
@@ -381,6 +382,259 @@
       animation: fadeInUp 1s ease 1.4s both;
     }
 
+    /* ======================== */
+    /*    MUSIC TOGGLE BUTTON   */
+    /* ======================== */
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 107, 129, 0.4);
+      background: rgba(26, 10, 10, 0.8);
+      backdrop-filter: blur(10px);
+      color: #ff6b81;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .music-toggle.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .music-toggle:hover {
+      background: rgba(255, 107, 129, 0.15);
+      border-color: rgba(255, 107, 129, 0.7);
+      transform: scale(1.1);
+    }
+
+    .music-toggle .bar {
+      display: inline-block;
+      width: 3px;
+      margin: 0 1.5px;
+      background: #ff6b81;
+      border-radius: 2px;
+      animation: soundBar 0.8s ease-in-out infinite alternate;
+    }
+
+    .music-toggle .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .music-toggle .bar:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+    .music-toggle .bar:nth-child(3) { height: 10px; animation-delay: 0.4s; }
+    .music-toggle .bar:nth-child(4) { height: 16px; animation-delay: 0.1s; }
+
+    .music-toggle.muted .bar {
+      animation: none;
+      height: 3px !important;
+    }
+
+    @keyframes soundBar {
+      0% { transform: scaleY(0.4); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* ======================== */
+    /*     DUDU & BUBU GIFS     */
+    /* ======================== */
+    .gif-sticker {
+      border-radius: 50%;
+      background: rgba(255, 220, 230, 0.92);
+      padding: 6px;
+      box-shadow: 0 4px 20px rgba(255, 71, 87, 0.2);
+      pointer-events: none;
+    }
+
+    .landing-gif {
+      width: clamp(80px, 18vw, 120px);
+      position: absolute;
+      bottom: 8%;
+      right: 8%;
+      animation: fadeIn 1s ease 2.5s both, floatBounce 3s ease-in-out infinite;
+    }
+
+    .letter-gif {
+      width: clamp(90px, 22vw, 140px);
+      margin-top: 1.5rem;
+      animation: fadeInUp 1s ease 0.5s both, floatBounce 3s ease-in-out infinite;
+    }
+
+    .finale-gif {
+      width: clamp(100px, 25vw, 160px);
+      margin-top: 1.5rem;
+      animation: fadeInUp 1s ease 1.8s both, floatBounce 3s ease-in-out infinite;
+    }
+
+    @keyframes floatBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ======================== */
+    /*   SCREEN: LOVE LETTER    */
+    /* ======================== */
+    #letter-screen {
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #1a0a0a 100%);
+    }
+
+    .letter-paper {
+      width: clamp(280px, 85vw, 480px);
+      min-height: 200px;
+      background: linear-gradient(135deg, #fdf6ee, #f5ede0);
+      border-radius: 12px;
+      padding: clamp(1.5rem, 5vw, 2.5rem);
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 129, 0.1);
+      animation: zoomIn 0.8s ease both;
+    }
+
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        transparent,
+        transparent 27px,
+        rgba(200, 180, 160, 0.2) 27px,
+        rgba(200, 180, 160, 0.2) 28px
+      );
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .letter-paper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 40px;
+      width: 1px;
+      height: 100%;
+      background: rgba(255, 100, 100, 0.15);
+    }
+
+    .letter-content {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1rem, 3.5vw, 1.3rem);
+      color: #4a3030;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+      min-height: 150px;
+    }
+
+    .letter-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: #ff4757;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: cursorBlink 0.6s ease-in-out infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .letter-tap-hint {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
+      margin-top: 1.2rem;
+      letter-spacing: 1px;
+      animation: softPulse 2s ease-in-out infinite;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .letter-tap-hint.visible {
+      opacity: 1;
+    }
+
+    /* ======================== */
+    /*      DAYS COUNTER        */
+    /* ======================== */
+    .days-counter {
+      margin-top: 1.5rem;
+      animation: fadeInUp 1s ease 2s both;
+      text-align: center;
+    }
+
+    .days-number {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.5rem, 10vw, 4.5rem);
+      color: #ff4757;
+      text-shadow: 0 0 30px rgba(255, 71, 87, 0.4);
+      line-height: 1;
+    }
+
+    .days-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      color: rgba(255, 107, 129, 0.5);
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    /* ======================== */
+    /*   CONFETTI / PETALS      */
+    /* ======================== */
+    .rain-petal {
+      position: absolute;
+      top: -5%;
+      animation: petalFall linear forwards;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    @keyframes petalFall {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+      5% { opacity: 0.9; }
+      100% {
+        transform: translateY(110vh) rotate(720deg) translateX(80px);
+        opacity: 0;
+      }
+    }
+
+    .sparkle {
+      position: absolute;
+      top: -5%;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      animation: sparkleFall linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes sparkleFall {
+      0% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+      }
+      10% { opacity: 1; transform: translateY(10vh) scale(1); }
+      50% { opacity: 1; }
+      100% {
+        transform: translateY(110vh) scale(0);
+        opacity: 0;
+      }
+    }
+
     /* Hearts rain for finale */
     .hearts-rain {
       position: fixed;
@@ -507,13 +761,17 @@
     </div>
 
     <p class="hint-text">Toca el sobre &hearts;</p>
+    <img src="fotos/gif2.gif" alt="Dudu" class="gif-sticker landing-gif">
   </div>
 
-  <!-- ====== SCREEN 2: TRANSITION ====== -->
-  <div class="screen" id="transition-screen">
-    <p class="transition-text">
-      Cada momento contigo<br>es un regalo...
-    </p>
+  <!-- ====== SCREEN 2: LOVE LETTER ====== -->
+  <div class="screen" id="letter-screen" onclick="skipLetter()">
+    <div class="letter-paper">
+      <p class="letter-content" id="letterContent"></p>
+      <span class="letter-cursor" id="letterCursor"></span>
+    </div>
+    <img src="fotos/gif3.gif" alt="Dudu y Bubu" class="gif-sticker letter-gif">
+    <p class="letter-tap-hint" id="letterHint">toca para continuar</p>
   </div>
 
   <!-- ====== SCREEN 3: PHOTOS ====== -->
@@ -534,12 +792,30 @@
     <h1 class="finale-text">Feliz San Valent&iacute;n</h1>
     <p class="finale-sub">con todo mi amor</p>
     <p class="finale-names">Natalia &hearts; Nico</p>
+    <div class="days-counter">
+      <div class="days-number" id="daysNumber"></div>
+      <div class="days-label">d&iacute;as juntos</div>
+    </div>
+    <img src="fotos/gif1.gif" alt="Dudu y Bubu abrazo" class="gif-sticker finale-gif">
     <div class="hearts-rain" id="heartsRain"></div>
   </div>
 
+  <!-- Music toggle button -->
+  <button class="music-toggle muted" id="musicToggle" onclick="toggleMusic()">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="Musica/DieForYou.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     // =============================
-    //  CONFIG - Pon aqui tus fotos
+    //  CONFIG
     // =============================
     const PHOTOS = [
       'fotos/foto1.jpg',
@@ -552,11 +828,23 @@
       'fotos/foto8.jpg',
     ];
 
+    // Pon aqui vuestra fecha de inicio de relacion (YYYY, MM-1, DD)
+    const ANNIVERSARY_DATE = new Date(2025, 7, 13); // 13 de Agosto 2025
+
+    const LETTER_TEXT = 'Buenos dias amor 🖤🖤\n\nEspero que te gusten estas fotos de los dos. Me hace muy feliz ser tu pareja y te quiero un monton MUAKKKKK💗💗';
+
     // =============================
     //  STATE
     // =============================
     let currentPhoto = 0;
     let isTransitioning = false;
+    let musicStarted = false;
+    let letterDone = false;
+    let letterTyping = false;
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+
+    bgMusic.currentTime = 90;
 
     // =============================
     //  FLOATING HEARTS BACKGROUND
@@ -588,6 +876,52 @@
     // =============================
     //  ENVELOPE OPEN
     // =============================
+    // =============================
+    //  MUSIC CONTROLS
+    // =============================
+    function startMusic() {
+      if (musicStarted) return;
+      bgMusic.currentTime = 90;
+      bgMusic.volume = 0;
+      bgMusic.play().then(() => {
+        musicStarted = true;
+        musicToggle.classList.add('visible');
+        musicToggle.classList.remove('muted');
+        // Fade in over 2 seconds
+        let vol = 0;
+        const fadeIn = setInterval(() => {
+          vol += 0.05;
+          if (vol >= 0.6) {
+            vol = 0.6;
+            clearInterval(fadeIn);
+          }
+          bgMusic.volume = vol;
+        }, 100);
+      }).catch(() => {
+        // Autoplay blocked - show toggle so user can tap
+        musicToggle.classList.add('visible');
+      });
+    }
+
+    function toggleMusic() {
+      if (!musicStarted) {
+        bgMusic.currentTime = 90;
+        bgMusic.volume = 0.6;
+        bgMusic.play().then(() => {
+          musicStarted = true;
+          musicToggle.classList.remove('muted');
+        });
+        return;
+      }
+      if (bgMusic.paused) {
+        bgMusic.play();
+        musicToggle.classList.remove('muted');
+      } else {
+        bgMusic.pause();
+        musicToggle.classList.add('muted');
+      }
+    }
+
     function openEnvelope() {
       if (isTransitioning) return;
       isTransitioning = true;
@@ -595,17 +929,62 @@
       const envelope = document.getElementById('envelope');
       envelope.classList.add('opening');
 
-      // After envelope animation, show transition text
       setTimeout(() => {
-        showScreen('transition-screen');
-
-        // After reading the text, show first photo
-        setTimeout(() => {
-          setupPhotos();
-          showScreen('photo-screen');
-          isTransitioning = false;
-        }, 2500);
+        showScreen('letter-screen');
+        startTypewriter();
+        isTransitioning = false;
       }, 1500);
+    }
+
+    // =============================
+    //  TYPEWRITER LETTER
+    // =============================
+    function startTypewriter() {
+      const content = document.getElementById('letterContent');
+      const cursor = document.getElementById('letterCursor');
+      const hint = document.getElementById('letterHint');
+      content.innerHTML = '';
+      letterTyping = true;
+      letterDone = false;
+      let i = 0;
+
+      function type() {
+        if (!letterTyping) return;
+        if (i < LETTER_TEXT.length) {
+          if (LETTER_TEXT[i] === '\n') {
+            content.innerHTML += '<br>';
+          } else {
+            content.innerHTML += LETTER_TEXT[i];
+          }
+          i++;
+          setTimeout(type, 45);
+        } else {
+          letterDone = true;
+          letterTyping = false;
+          cursor.style.display = 'none';
+          hint.classList.add('visible');
+        }
+      }
+      type();
+    }
+
+    function skipLetter() {
+      if (letterTyping && !letterDone) {
+        // Fast-forward: show full text
+        letterTyping = false;
+        const content = document.getElementById('letterContent');
+        const cursor = document.getElementById('letterCursor');
+        const hint = document.getElementById('letterHint');
+        content.innerHTML = LETTER_TEXT.replace(/\n/g, '<br>');
+        cursor.style.display = 'none';
+        letterDone = true;
+        hint.classList.add('visible');
+        return;
+      }
+      if (letterDone) {
+        setupPhotos();
+        showScreen('photo-screen');
+      }
     }
 
     // =============================
@@ -666,36 +1045,121 @@
     // =============================
     //  FINALE HEARTS RAIN
     // =============================
+    // =============================
+    //  DAYS COUNTER
+    // =============================
+    function updateDaysCounter() {
+      const today = new Date();
+      const diff = Math.floor((today - ANNIVERSARY_DATE) / (1000 * 60 * 60 * 24));
+      document.getElementById('daysNumber').textContent = diff;
+    }
+
+    // =============================
+    //  FINALE: CONFETTI + PETALS
+    // =============================
     function startHeartsRain() {
+      updateDaysCounter();
       const container = document.getElementById('heartsRain');
       const hearts = ['\u2665', '\u2764', '\u2661'];
+      const petals = ['\uD83C\uDF38', '\uD83C\uDF3A', '\uD83C\uDF39', '\uD83C\uDF4C'];
+      const sparkleColors = ['#ff6b81', '#ff4757', '#ffa502', '#ff6348', '#ff7979', '#f8a5c2'];
 
       function spawnHeart() {
-        const heart = document.createElement('span');
-        heart.className = 'rain-heart';
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (0.8 + Math.random() * 2) + 'rem';
-        heart.style.color = `hsl(${345 + Math.random() * 20}, ${70 + Math.random() * 30}%, ${50 + Math.random() * 20}%)`;
-        heart.style.animationDuration = (3 + Math.random() * 4) + 's';
-        container.appendChild(heart);
+        const el = document.createElement('span');
+        el.className = 'rain-heart';
+        el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        el.style.left = Math.random() * 100 + '%';
+        el.style.fontSize = (0.8 + Math.random() * 2) + 'rem';
+        el.style.color = `hsl(${345 + Math.random() * 20}, ${70 + Math.random() * 30}%, ${50 + Math.random() * 20}%)`;
+        el.style.animationDuration = (3 + Math.random() * 4) + 's';
+        container.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
 
-        heart.addEventListener('animationend', () => heart.remove());
+      function spawnPetal() {
+        const el = document.createElement('span');
+        el.className = 'rain-petal';
+        el.textContent = petals[Math.floor(Math.random() * petals.length)];
+        el.style.left = Math.random() * 100 + '%';
+        el.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
+        el.style.animationDuration = (4 + Math.random() * 5) + 's';
+        container.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+
+      function spawnSparkle() {
+        const el = document.createElement('span');
+        el.className = 'sparkle';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.background = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+        el.style.boxShadow = `0 0 6px ${el.style.background}`;
+        el.style.width = (2 + Math.random() * 4) + 'px';
+        el.style.height = el.style.width;
+        el.style.animationDuration = (2 + Math.random() * 3) + 's';
+        container.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
       }
 
       // Initial burst
-      for (let i = 0; i < 30; i++) {
-        setTimeout(() => spawnHeart(), i * 100);
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => spawnHeart(), i * 80);
+      }
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => spawnPetal(), i * 120 + 200);
+      }
+      for (let i = 0; i < 25; i++) {
+        setTimeout(() => spawnSparkle(), i * 60);
       }
 
-      // Continuous rain
-      setInterval(spawnHeart, 300);
+      // Continuous mixed rain
+      setInterval(spawnHeart, 400);
+      setInterval(spawnPetal, 600);
+      setInterval(spawnSparkle, 250);
     }
 
     // =============================
     //  INIT
     // =============================
     createFloatingHearts();
+
+    // Start music on first user interaction (tap/click anywhere)
+    function initMusicOnFirstTouch() {
+      startMusic();
+      document.removeEventListener('click', initMusicOnFirstTouch);
+      document.removeEventListener('touchstart', initMusicOnFirstTouch);
+    }
+    document.addEventListener('click', initMusicOnFirstTouch);
+    document.addEventListener('touchstart', initMusicOnFirstTouch);
+
+    // =============================
+    //  PARALLAX (GYROSCOPE + MOUSE)
+    // =============================
+    const heartsBgEl = document.getElementById('heartsBg');
+    let parallaxX = 0, parallaxY = 0;
+
+    function applyParallax(x, y) {
+      // x, y normalized to roughly -1..1
+      const moveX = x * 15;
+      const moveY = y * 15;
+      heartsBgEl.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    }
+
+    // Gyroscope for mobile
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        if (e.gamma === null) return;
+        const x = Math.max(-1, Math.min(1, (e.gamma || 0) / 30));
+        const y = Math.max(-1, Math.min(1, ((e.beta || 0) - 45) / 30));
+        applyParallax(x, y);
+      });
+    }
+
+    // Mouse fallback for desktop
+    document.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      applyParallax(x, y);
+    });
   </script>
 
 </body>
